@@ -1,0 +1,415 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<!DOCTYPE mapper
+ 			PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+ 					"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ 					
+<mapper namespace="iSQL">
+	<!-- 자동차 캠핑 -->
+	<select id="sel_ac" resultType="iVO">
+		SELECT
+		ifno ,ifname, iftel, NVL(ifpri, '정보 없음') ifpri, NVL(iflink, '정보 없음') iflink
+		FROM
+			info
+		WHERE
+			ifct = 'acp'
+			AND ifshow = 'Y'
+	</select>
+	
+	<!-- 맵API 마커 여러개 찍기 테스트 -->
+	<select id="Addr_ac" resultType="iVO">
+		SELECT
+			ifaddr, ifname
+		FROM
+			info
+		WHERE
+			ifct= 'acp'
+			AND ifshow = 'Y'
+	</select>
+	
+	<!-- 클릭시 상세보기 -->
+	<select id="Detail_ac" resultType="iVO">
+		SELECT
+		    DISTINCT(i.ifno) ifno , ifname, iftel, ifaddr , NVL(ifpri, '정보없음') ifpri , NVL(iflink, '정보없음') iflink, iflike,
+		    (SELECT FLOOR(AVG(rst)) FROM review WHERE r.ifno = #{ifno}) ifrst, 
+		    (SELECT COUNT(*) FROM review WHERE ifno = #{ifno} AND isshow ='Y') ifrcnt,
+		    le.clike, m.memid memid, ifct
+		FROM
+		    info i, review r, member m,(
+                SELECT
+                    COUNT(*) clike
+                FROM
+                    plike p, info inf
+                WHERE
+                 inf.ifno = #{ifno}
+                AND p.ifno = inf.ifno
+                AND p.memno = (
+                    SELECT
+                        memno
+                    FROM
+                        member
+                    WHERE
+                        memid = #{memid}
+                )
+            ) le
+		WHERE
+		    ifct = 'acp'
+		    AND i.ifno = r.ifno(+)
+		    AND i.ifno = #{ifno}
+		    AND m.memid = #{memid}
+	</select>
+	
+	
+	<select id="review_ac" resultType="iVO">
+		SELECT
+		    rtt ifrtt, rbd ifrbd, m.name name, r.rst ifrst , TO_CHAR(r.today,'yyyy/MM/dd HH24:mm:ss') rdate, memid, r.rno ifrno
+		FROM
+		    member m , info i , review r
+		WHERE
+		    i.ifno = #{ifno}
+		    AND r.ifno = i.ifno
+		    AND r.memno = m.memno
+		    AND r.isshow = 'Y'
+		ORDER BY
+		    r.today
+	</select>
+	
+	<insert id="review_ac_add">
+		INSERT INTO
+ 		   review(rno, ifno, rtt, rbd, memno, rst)
+		VALUES (
+    	  (SELECT NVL(MAX(rno) +1, 100000)FROM review), #{ifno}, #{ifrtt}, #{ifrbd}, 
+          (SELECT memno FROM member WHERE memid = #{memid}), #{ifrst}
+        )
+	</insert>
+	
+	<update id="review_ac_del">
+		UPDATE
+		    review
+		SET
+		    isshow = 'N'
+		WHERE
+		    rno = #{ifrno}
+	</update>
+	
+	<update id="review_ac_mod">
+		UPDATE
+		    review
+		SET
+		    rtt = #{ifrtt},
+		    rbd = #{ifrbd}
+		WHERE
+		    rno = #{ifrno}
+	</update>
+	<!-- 자동차 캠핑 -->
+	
+	
+	<!-- 자동차 극장 -->
+	<select id="sel_ct" resultType="iVO">
+		SELECT
+		ifno ,ifname, iftel, NVL(ifpri, '정보 없음') ifpri, NVL(iflink, '정보 없음') iflink
+		FROM
+			info
+		WHERE
+			ifct = 'ctt'
+			AND ifshow = 'Y'
+	</select>
+	
+	<!-- 맵API 마커 여러개 찍기 테스트 -->
+	<select id="Addr_ct" resultType="iVO">
+		SELECT
+			ifaddr, ifname
+		FROM
+			info
+		WHERE
+			ifct= 'ctt'
+			AND ifshow = 'Y'
+	</select>
+	<!-- 맵API 마커 여러개 찍기 테스트 -->
+	
+	
+	
+	<select id="Detail_ct" resultType="iVO">
+		SELECT
+		    DISTINCT(i.ifno) ifno , ifname, iftel, ifaddr , NVL(ifpri, '정보없음') ifpri , NVL(iflink, '정보없음') iflink, iflike,
+		    (SELECT FLOOR(AVG(rst)) FROM review WHERE r.ifno = #{ifno}) ifrst, 
+		    (SELECT COUNT(*) FROM review WHERE ifno = #{ifno} AND isshow ='Y') ifrcnt,
+		    le.clike, m.memid memid, ifct
+		FROM
+		    info i, review r, member m,(
+                SELECT
+                    COUNT(*) clike
+                FROM
+                    plike p, info inf
+                WHERE
+                 inf.ifno = #{ifno}
+                AND p.ifno = inf.ifno
+                AND p.memno = (
+                    SELECT
+                        memno
+                    FROM
+                        member
+                    WHERE
+                        memid = #{memid}
+                )
+            ) le
+		WHERE
+		    ifct = 'ctt'
+		    AND i.ifno = r.ifno(+)
+		    AND i.ifno = #{ifno}
+		    AND m.memid = #{memid}
+	</select>
+	
+	
+	<select id="review_ct" resultType="iVO">
+		SELECT
+		    rtt ifrtt, rbd ifrbd, m.name name , r.rst ifrst , TO_CHAR(r.today,'yyyy/MM/dd HH24:mm:ss') rdate, memid, r.rno ifrno
+		FROM
+		    member m , info i , review r
+		WHERE
+		    i.ifno = #{ifno}
+		    AND r.ifno = i.ifno
+		    AND r.memno = m.memno
+		    AND r.isshow = 'Y'
+		ORDER BY
+		    r.today
+	</select>
+	
+	<insert id="review_ct_add">
+		INSERT INTO
+ 		   review(rno, ifno, rtt, rbd, memno, rst)
+		VALUES (
+    	  (SELECT NVL(MAX(rno) +1, 100000)FROM review), #{ifno}, #{ifrtt}, #{ifrbd}, 
+          (SELECT memno FROM member WHERE memid = #{memid}), #{ifrst}
+        )
+	</insert>
+	
+	<update id="review_ct_del">
+		UPDATE
+		    review
+		SET
+		    isshow = 'N'
+		WHERE
+		    rno = #{ifrno}
+	</update>
+	
+	<update id="review_ct_mod">
+		UPDATE
+		    review
+		SET
+		    rtt = #{ifrtt},
+		    rbd = #{ifrbd}
+		WHERE
+		    rno = #{ifrno}
+	</update>
+	
+	
+	
+	
+	<!-- 승차 검진소 -->
+	<select id="sel_dt" resultType="iVO">
+		SELECT
+		ifno ,ifname, iftel, NVL(ifpri, '정보 없음') ifpri, NVL(iflink, '정보 없음') iflink
+		FROM
+			info
+		WHERE
+			ifct = 'dtc'
+			AND ifshow = 'Y'
+	</select>
+	
+	<!-- 맵API 마커 여러개 찍기 테스트 -->
+	<select id="Addr_dt" resultType="iVO">
+		SELECT
+			ifaddr, ifname
+		FROM
+			info
+		WHERE
+			ifct= 'dtc'
+			AND ifshow = 'Y'
+	</select>
+	<!-- 맵API 마커 여러개 찍기 테스트 -->
+	
+	
+	
+	<select id="Detail_dt" resultType="iVO">
+		SELECT
+		    DISTINCT(i.ifno) ifno , ifname, iftel, ifaddr , NVL(ifpri, '정보없음') ifpri , NVL(iflink, '정보없음') iflink, iflike,
+		    (SELECT FLOOR(AVG(rst)) FROM review WHERE r.ifno = #{ifno}) ifrst, 
+		    (SELECT COUNT(*) FROM review WHERE ifno = #{ifno} AND isshow ='Y') ifrcnt,
+		    le.clike, m.memid memid, ifct
+		FROM
+		    info i, review r, member m,(
+                SELECT
+                    COUNT(*) clike
+                FROM
+                    plike p, info inf
+                WHERE
+                 inf.ifno = #{ifno}
+                AND p.ifno = inf.ifno
+                AND p.memno = (
+                    SELECT
+                        memno
+                    FROM
+                        member
+                    WHERE
+                        memid = #{memid}
+                )
+            ) le
+		WHERE
+		    ifct = 'dtc'
+		    AND i.ifno = r.ifno(+)
+		    AND i.ifno = #{ifno}
+		    AND m.memid = #{memid}
+	</select>
+	
+	
+	<select id="review_dt" resultType="iVO">
+		SELECT
+		    rtt ifrtt, rbd ifrbd, m.name name, r.rst ifrst , TO_CHAR(r.today,'yyyy/MM/dd HH24:mm:ss') rdate, memid, r.rno ifrno
+		FROM
+		    member m , info i , review r
+		WHERE
+		    i.ifno = #{ifno}
+		    AND r.ifno = i.ifno
+		    AND r.memno = m.memno
+		    AND r.isshow = 'Y'
+		ORDER BY
+		    r.today
+	</select>
+	
+	<insert id="review_dt_add">
+		INSERT INTO
+ 		   review(rno, ifno, rtt, rbd, memno, rst)
+		VALUES (
+    	  (SELECT NVL(MAX(rno) +1, 100000)FROM review), #{ifno}, #{ifrtt}, #{ifrbd}, 
+          (SELECT memno FROM member WHERE memid = #{memid}), #{ifrst}
+        )
+	</insert>
+	
+	<update id="review_dt_del">
+		UPDATE
+		    review
+		SET
+		    isshow = 'N'
+		WHERE
+		    rno = #{ifrno}
+	</update>
+	
+	<update id="review_dt_mod">
+		UPDATE
+		    review
+		SET
+		    rtt = #{ifrtt},
+		    rbd = #{ifrbd}
+		WHERE
+		    rno = #{ifrno}
+	</update>
+	<!-- 승차 검진소 -->
+	
+	<insert id="addlike">
+		INSERT INTO
+			plike(lno, ifno, memno)
+		VALUES
+			(
+			  (SELECT NVL(MAX(lno)+1, 1) FROM plike),
+			  #{ifno}, (SELECT memno FROM member WHERE memid=#{memid})			
+			)
+	</insert>
+	
+	
+	<!-- info 좋아요 칼럼 값 +1 -->
+	<update id="pluslike">
+		UPDATE
+			info
+		SET
+			iflike = iflike + 1
+		WHERE
+			ifno = #{ifno}
+	</update>
+	
+	<!-- info 좋아요 칼럼 값 -1 -->
+	<update id="minuslike">
+		UPDATE
+			info
+		SET
+			iflike = iflike - 1
+		WHERE
+			ifno = #{ifno}
+	</update>
+	
+	<!-- info 좋아요 delete -->
+	<delete id="dellike">
+		DELETE FROM
+			plike
+		WHERE
+			ifno = #{ifno}
+			AND memno = (SELECT memno FROM member WHERE memid=#{memid})
+	</delete>
+	
+	<!-- Main 팝니당 매장 주소리스트 -->
+	<select id="mainAddr" resultType="sVO">
+		SELECT
+		    bname, bloc 
+		FROM
+		    promotion p, member m
+		WHERE
+		    p.memno = m.memno
+	</select>
+	
+	<!-- Main 회원수 , 판매점 수  -->
+	<select id="mainCnt" resultType="iVO">
+		SELECT
+		    mcnt, pcnt
+		FROM
+		    (
+		        SELECT
+		            COUNT(*) mcnt
+		        FROM
+		            MEMBER
+		        WHERE
+		            mshow = 'Y'
+		    ), (
+		        SELECT
+		            COUNT(*) pcnt
+		        FROM
+		            promotion
+		        WHERE
+		            isshow = 'Y'
+		    )   
+	</select>
+	
+	<!-- right promotion 좋아요 TOP 5-->
+	<select id="pro_like_top5" resultType="sVO">
+		SELECT
+		   e.bname bname, e.lcnt lcnt
+		FROM
+		(SELECT
+		    bname, lcnt 
+		FROM
+		    promotion p, member m
+		WHERE
+		    p.memno = m.memno
+		ORDER BY
+		    lcnt desc) e
+		WHERE
+		    rownum BETWEEN 1 AND 5
+	</select>
+	
+	
+	<!-- right info 좋아요 TOP 5-->
+	<select id="info_like_top5" resultType="iVO">
+		SELECT
+		   ifname, iflike
+		FROM
+		(SELECT
+		    ifname, iflike
+		FROM
+		    info
+		ORDER BY
+		    iflike desc) e
+		WHERE
+		    rownum BETWEEN 1 AND 5
+	</select>
+	
+</mapper>

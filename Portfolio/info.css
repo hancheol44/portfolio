@@ -1,0 +1,165 @@
+#ifrcnt {
+	color: #0080ff;
+	font-size: 1em;
+}
+
+
+.mgbottom {
+	margin-bottom: 10px;
+}
+
+.detail_card{
+  background-color: white;
+  text-align: left;
+  margin-left: 100px;
+}
+
+#map {
+	width: 600px;
+	height: 450px;
+	display: block;
+	float: left;
+}
+
+#List {
+	width: auto; 
+	height: 450px; 
+	float: left; 
+	overflow: auto; 
+	border-style: outset; 
+	margin-left: 100px;
+}
+
+table.cp {
+	width: 100%;
+	border-collapse: collapse;
+	border: 2px solid white;
+	margin-left: 0px;
+	margin-right: 0px;
+	text-align: center;
+	font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+}
+
+table.cp tr:nth-child(odd){background-color: #ffffff;}
+
+table.cp tr:hover {background-color: #e1ffff;} 
+
+table.cp td, table.cp th {
+  border: 1px solid #ddd;
+}
+
+table.cp th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: center;
+}
+
+#rebd{
+	 width: 85%;
+	 height: 100px;
+	 resize: none;
+}
+#rett{
+	 width: 85%;
+	 height: 30px;
+	 resize: none;
+}
+#rst{
+	margin-bottom: 15px;
+}
+#rstSelect{
+	width: 20em;
+	height: 2em;	
+	text-align: center;
+	margin-bottom: 10px;
+	color: orange;
+}
+
+#strpoint {
+	color: orange;
+}
+
+.avgstr {
+	float: left;
+	margin-right: 10px;
+}
+
+/* Button  */
+#delbtn, #modbtn{
+  background: #0080ff;
+  color:#fff;
+  border:none;
+  position:relative;
+  height:20px;
+  font-size:0.8em;
+  padding:0 1em;
+  cursor:pointer;
+  transition:800ms ease all;
+  outline:none;
+  margin-right: 1em;
+}
+#delbtn:hover, #modbtn:hover{
+  background:#fff;
+  color:#0080ff;
+}
+#delbtn:before,#delbtn:after, #modbtn:before,#modbtn:after{
+  content:'';
+  position:absolute;
+  top:0;
+  right:0;
+  height:2px;
+  width:0;
+  background: #0080ff;
+  transition:400ms ease all;
+}
+#delbtn:after, #modbtn:after{
+  right:inherit;
+  top:inherit;
+  left:0;
+  bottom:0;
+}
+#delbtn:hover:before,#delbtn:hover:after, #modbtn:hover:before,#modbtn:hover:after{
+  width:100%;
+  transition:800ms ease all;
+}
+
+
+
+
+button{
+  background: #0080ff;
+  color:#fff;
+  border:none;
+  position:relative;
+  height:30px;
+  font-size:1.6em;
+  padding:0 2em;
+  cursor:pointer;
+  transition:800ms ease all;
+  outline:none;
+}
+button:hover{
+  background:#fff;
+  color:#0080ff;
+}
+button:before,button:after{
+  content:'';
+  position:absolute;
+  top:0;
+  right:0;
+  height:2px;
+  width:0;
+  background: #0080ff;
+  transition:400ms ease all;
+}
+button:after{
+  right:inherit;
+  top:inherit;
+  left:0;
+  bottom:0;
+}
+button:hover:before,button:hover:after{
+  width:100%;
+  transition:800ms ease all;
+}
+
